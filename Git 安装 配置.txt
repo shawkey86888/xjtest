@@ -1,0 +1,61 @@
+Linux
+5、源码编译安装Git
+
+大体的安装步骤如下：
+
+①、获取github最新的Git安装包下载链接，进入Linux服务器，执行下载，命令为： wget https://github.com/git/git/archive/v2.17.0.tar.gz ；
+
+②、压缩包解压，命令为： tar -zxvf v2.17.0.tar.gz ；
+
+③、安装编译源码所需依赖，命令为： yum install curl-devel expat-devel gettext-devel openssl-devel zlib-devel gcc perl-ExtUtils-MakeMaker 耐心等待安装，出现提示输入y即可；
+
+④、安装依赖时，yum自动安装了Git，需要卸载旧版本Git，命令为： yum remove git 出现提示输入y即可；
+
+⑤、进入解压后的文件夹，命令 cd git-2.17.0 ，然后执行编译，命令为 make prefix=/usr/local/git all 耐心等待编译即可；
+
+⑥、安装Git至/usr/local/git路径，命令为 make prefix=/usr/local/git install ；
+
+⑦、打开环境变量配置文件，命令 vim /etc/profile ，在底部加上Git相关配置信息：
+
+PATH=$PATH:/usr/local/git/bin 
+
+export PATH 
+
+然后保存，退出！
+
+
+export GIT_HOME=/usr/local/git
+export JAVA_HOME=/usr/java/jdk1.8.0_211
+export JRE_HOME=/usr/java/jdk1.8.0_211/jre
+export CLASSPATH=.:$JAVA_HOME/lib:$JRE_HOME/lib:$CLASSPATH
+export PATH=$JAVA_HOME/bin:$GIT_HOME/bin:$JRE_HOME/bin:$PATH
+
+⑧、输入命令 git --version ，查看安装的git版本，校验通过，安装成功。
+
+
+
+Windows安装后配置						//配置环境变量
+git config --global user.name "xiaojian"              //GitHub用户名
+
+git config --global user.email xiaojian@163.com   //这里用GitHub的注册邮箱
+							//先配置环境变量usr/bin
+ssh-key -t rsa -C "coiggahou@foxmail.com"		//此处“C”要大写，邮箱使用GitHub注册邮箱
+回车 回车 先生成的key放到GitHub 的setting 的new SSH title随便写 完成
+测试:打开Git Bash终端 输入 ssh -T git@github.com
+
+2、解决提交时将汉字分拆的乱码问题 git config –global core.quotepath false
+设置图形界面编码 git config –global gui.encoding utf-8
+提交信息编码 git config –global i18n.commit.encoding utf-8
+输出信息编码 git config –global i18n.logoutputencoding utf-8
+设置系统语言 export LESSCHARSET=utf-8
+
+客户端配置
+克隆远程仓库 git clone username@host:/usr/local/git/mygit/mygit.git
+即可完成远程仓库的克隆。这里的username应替换成你远程仓库主机的用户名，host一般是远程仓库的IP地址，或者你可以将远程计算机名添加入客户端的host文件
+
+报错
+bash: git-upload-pack: command not found
+fatal: The remote end hung up unexpectedly
+什么原因呢？原来代码服务器【192.168.124.5】上的git安装路径是/usr/local/git，不是默认路径，
+在git服务器192.168.124.5上， 建立链接文件：root用户
+ln -s /usr/local/git/bin/git-upload-pack /usr/bin/git-upload-pack
